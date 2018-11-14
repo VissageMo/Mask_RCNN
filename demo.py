@@ -49,23 +49,23 @@ class_names = ['BG', 'person', 'bicycle', 'car', 'motorcycle', 'airplane',
                'teddy bear', 'hair drier', 'toothbrush']
 
 file_names = next(os.walk(IMAGE_DIR))[2]
-chosen_name = random.choice(file_names)
-image = skimage.io.imread(os.path.join(IMAGE_DIR, chosen_name))
-results = model.detect([image], verbose=1)
+for file in file_names:
+    image = skimage.io.imread(os.path.join(IMAGE_DIR, file))
+    results = model.detect([image], verbose=1)
 
-r = results[0]
+    r = results[0]
 
-# visualize.display_instances(image, r['rois'], r['masks'],
-#                             r['class_ids'],
-#                             class_names, r['scores'])
+    # visualize.display_instances(image, r['rois'], r['masks'],
+    #                             r['class_ids'],
+    #                             class_names, r['scores'])
 
-r['rois'] = r['rois'].tolist()
-r['class_ids'] = r['class_ids'].tolist()
-r['scores'] = r['scores'].tolist()
-del r['masks']
-print(r)
+    r['rois'] = r['rois'].tolist()
+    r['class_ids'] = r['class_ids'].tolist()
+    r['scores'] = r['scores'].tolist()
+    r['masks'] = r['masks'].tolist()
+    # del r['masks']
 
-fname = chosen_name.split('.')[0] + '.json'
-json.dump(r, open('output/' + fname, 'w'), indent=2)
+    fname = file.split('.')[0] + '.json'
+    json.dump(r, open('output/' + fname, 'w'), indent=2)
 
 # 1,3 lie; 2,4 hang
